@@ -1,2 +1,4 @@
-# GUS_DBW_UI
-User interface for GUS API DBW
+# GUS DBW UI
+User friendly interface for [GUS](/https://stat.gov.pl/) Dziedzinowe Bazy Wiedzy API
+
+
