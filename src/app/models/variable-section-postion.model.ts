@@ -1,4 +1,4 @@
-export interface DimensionItemCrossSectionModel {
+export interface VariableSectionPostionModel {
   "id-przekroj": number;
   "id-wymiar": number;
   "nazwa-wymiar": string;

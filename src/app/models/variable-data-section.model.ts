@@ -1,4 +1,4 @@
-export interface DataCrossSectionsVariableModel {
+export interface VariableDataSectionModel {
   "rownumber": number;
   "id-zmienna": number;
   "id-przekroj": number;
