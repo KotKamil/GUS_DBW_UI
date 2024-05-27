@@ -1,0 +1,22 @@
+<div class="container" >
+  <div class="search-bar"
+       [class.wrong-value]="!options.includes(selectedValue) && selectedValue">
+    <input type="text" class="search-field"
+           (focusin)="isListHidden=false"
+           (ngModelChange)="filterOptions($event)"
+           [ngModel]="selectedValue">
+    <button (click)="onClick()" class="drop-down-button" >
+      <span class="material-symbols-outlined icon-animation" [class.rotate]="!isListHidden">
+        arrow_drop_down
+      </span>
+    </button>
+  </div>
+
+  <ul class="options-list" [class.hide-list]="isListHidden">
+    <li *ngFor="let option of displayedOptions">
+      <option (click)="onOptionSelect(option)">
+        {{option}}
+      </option>
+    </li>
+  </ul>
+</div>

@@ -4,7 +4,6 @@ import {Injectable} from "@angular/core";
 import {Language} from "../models/language.model";
 import {Area110Model} from "../models/area-1-1-0.model";
 import {VariableAreaModel} from "../models/variable-area.model";
-import * as process from "process";
 
 @Injectable({providedIn: "root"})
 export class DbwAreaService {
