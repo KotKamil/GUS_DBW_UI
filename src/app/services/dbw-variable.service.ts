@@ -24,7 +24,7 @@ export class DbwVariableService {
     params = params.append('numer-strony', pageNumber)
 
     return this.httpClient
-      .get<{data: VariableSectionPeriodModel}>(this.url + 'variable-section-periods', {params})
+      .get<{data: VariableSectionPeriodModel[]}>(this.url + 'variable-section-periods', {params})
       .pipe(map(response => response.data))
   }
 
@@ -36,7 +36,7 @@ export class DbwVariableService {
     params = params.append('id-przekroj', sectionId)
 
     return this.httpClient
-      .get<VariableSectionPostionModel>(this.url + 'variable-section-position', {params})
+      .get<VariableSectionPostionModel[]>(this.url + 'variable-section-position', {params})
   }
 
   /**Get data for selected variable, in selected section, period and year
@@ -69,6 +69,6 @@ export class DbwVariableService {
     params = params.append('id-zmiennej', variableId)
 
     return this.httpClient
-      .get<MetadataModel[]>(this.url + 'variable-meta', {params})
+      .get<MetadataModel>(this.url + 'variable-meta', {params})
   }
 }

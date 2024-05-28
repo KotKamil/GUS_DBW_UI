@@ -20,6 +20,6 @@ export class DbwAreaService {
   //Get a list of variables from thematic area
   GetAreaVariables(language: Language, areaId: number) {
     return this.httpClient
-      .get<VariableAreaModel>(this.url + 'area-variable', {params: {"id-obszaru": areaId, lang: language,}})
+      .get<VariableAreaModel[]>(this.url + 'area-variable', {params: {"id-obszaru": areaId, lang: language,}})
   }
 }

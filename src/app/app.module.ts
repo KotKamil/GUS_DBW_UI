@@ -3,14 +3,20 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
+import { SelectComponent } from './components/common/select/select.component';
+import {FormsModule} from "@angular/forms";
+import {ObjectTableComponent} from "./components/common/object-table/object-table.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SelectComponent,
+    ObjectTableComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
