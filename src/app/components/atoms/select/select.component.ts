@@ -1,20 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.css']
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent implements OnChanges {
   isListHidden = true;
   @Input() options!: Array<string>;
+  @Input() placeholder: string = '';
+  @Output() selection: EventEmitter<string> = new EventEmitter<string>()
   displayedOptions:Array<string> = []
   selectedValue = ""
 
   constructor() { }
 
-  ngOnInit(): void {
-    if (this.options === undefined) throw new Error("'options' are required in select component")
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options'] && this.options === undefined) throw new Error("'options' are required in select component")
     this.displayedOptions = this.options;
   }
 
@@ -30,5 +32,6 @@ export class SelectComponent implements OnInit {
   onOptionSelect(optionValue: string) {
     this.selectedValue = optionValue
     this.isListHidden = true
+    this.selection.emit(this.selectedValue)
   }
 }

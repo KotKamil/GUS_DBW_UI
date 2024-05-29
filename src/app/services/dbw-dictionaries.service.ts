@@ -37,6 +37,20 @@ export class DbwDictionariesService {
         .pipe(map(response => response.data));
   }
 
+  /** Get a list of values from "periods" dictionary within a specific range to reduce the number of requests
+   * @param language - choose the language of the response
+   * @param minIndex - minimum searched index
+   * @param maxIndex - maximum searched index*/
+  GetPeriodFromRange(language: Language, minIndex: number, maxIndex: number) {
+    let params = new HttpParams().append('lang', language);
+    params = params.append('filters', 'id-okres>=' + minIndex + ',id-okres<=' + maxIndex);
+    params = params.append('page-size', 5000)
+
+    return this.httpClient
+      .get<{data: PeriodModel[]}>(this.url + 'periods-dictionary', {params})
+      .pipe(map(response => response.data));
+  }
+
   /** Get a list of values from "way of presentation" dictionary
    * @param {number} presentationMethodId - enter the id to get a specific value
    * @param {Language} language - choose the language of the response*/

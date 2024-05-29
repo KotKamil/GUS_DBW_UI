@@ -2,6 +2,7 @@
   <div class="search-bar"
        [class.wrong-value]="!options.includes(selectedValue) && selectedValue">
     <input type="text" class="search-field"
+           [placeholder]="placeholder"
            (focusin)="isListHidden=false"
            (ngModelChange)="filterOptions($event)"
            [ngModel]="selectedValue">

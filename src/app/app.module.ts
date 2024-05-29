@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {ObjectTableComponent} from "./components/atoms/object-table/object-table.component";
 import { TestPageComponent } from './components/pages/test-page/test-page.component';
 import {AppRoutingModule} from "./app-routing.module";
+import { SearchDataPageComponent } from './components/pages/search-data-page/search-data-page.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import {AppRoutingModule} from "./app-routing.module";
     SelectComponent,
     ObjectTableComponent,
     TestPageComponent,
+    SearchDataPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,7 +16,6 @@ export class ObjectTableComponent implements OnChanges {
   ngOnChanges(changes:SimpleChanges): void {
     if (changes['objects'] && this.objects.length > 0)
       this.keys = Object.keys(this.objects[0])
-    console.log(this.keys)
   }
 
   hideData() {
