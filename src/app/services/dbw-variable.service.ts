@@ -3,7 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Language} from "../models/language.model";
 import {VariableSectionPeriodModel} from "../models/variable-section-period.model";
-import {map} from "rxjs";
+import {map, Observable} from "rxjs";
 import {VariableSectionPostionModel} from "../models/variable-section-postion.model";
 import {VariableDataSectionModel} from "../models/variable-data-section.model";
 import {MetadataModel} from "../models/metadata.model";
@@ -13,6 +13,19 @@ export class DbwVariableService {
   private url: string = environment.apiDbwURL + 'variable/'
 
   constructor(public httpClient: HttpClient) {}
+
+  /**Get the number of pages for the **variable-section-periods** endpoint
+   * @param language - choose the language of the response
+   * @param pageSize - determines how many records are given on each page (max 5000)*/
+  GetVariableSectionPeriodsPageCount(language: Language, pageSize: number): Observable<number> {
+    let params = new HttpParams().append('lang', language)
+    params = params.append('ile-na-stronie', pageSize)
+    params = params.append('numer-strony', '0')
+
+    return this.httpClient
+      .get<{"page-count": number}>(this.url + 'variable-section-periods', {params})
+      .pipe(map(response => response['page-count']))
+  }
 
   /**Get a list of variables with its section and periods
    * @param {Language} language - choose the language of the response
