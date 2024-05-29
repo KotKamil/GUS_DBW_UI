@@ -3,20 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import { SelectComponent } from './components/common/select/select.component';
+import { SelectComponent } from './components/atoms/select/select.component';
 import {FormsModule} from "@angular/forms";
-import {ObjectTableComponent} from "./components/common/object-table/object-table.component";
+import {ObjectTableComponent} from "./components/atoms/object-table/object-table.component";
+import { TestPageComponent } from './components/pages/test-page/test-page.component';
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     SelectComponent,
-    ObjectTableComponent
+    ObjectTableComponent,
+    TestPageComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

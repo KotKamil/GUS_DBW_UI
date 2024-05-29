@@ -1,0 +1,30 @@
+<h2>Areas</h2>
+<app-object-table [objects]="areas"></app-object-table>
+<div>
+  <h3>Select Area</h3>
+  <input type="number" [(ngModel)]="selectedArea">
+  <button (click)="fetchVariables()">Fetch area</button>
+</div>
+<h2>Variables</h2>
+<app-object-table [objects]="areaVariables"></app-object-table>
+<div>
+  <h3>Select variable</h3>
+  <input type="number" [(ngModel)]="selectedVariable">
+  <button (click)="fetchMeta()">Fetch variable</button>
+</div>
+<h2>Variable Values</h2>
+<div style="display: flex">
+  <input type="number" placeholder="Variable Section" [(ngModel)]="variableSection">
+  <input type="number" placeholder="year" [(ngModel)]="year">
+  <input type="number" placeholder="period" [(ngModel)]="period">
+</div>
+<button (click)="fetchData()">Fetch data</button>
+<app-object-table [objects]="variableValues"></app-object-table>
+<h2>Variable Meta</h2>
+<div *ngIf="variableMeta">
+  <pre>
+    {{variableMeta | json}}
+  </pre>
+</div>
+<h2>Variable Section Periods</h2>
+<app-object-table [objects]="variableSectionPeriods"></app-object-table>
