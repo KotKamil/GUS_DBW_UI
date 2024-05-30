@@ -1,4 +1,4 @@
-export interface VariableSectionPeriodModel {
+export interface SectionModel {
   "id-zmienna": number;
   "nazwa-zmienna": string;
   "id-przekroj": number;

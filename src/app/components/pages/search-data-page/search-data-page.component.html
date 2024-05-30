@@ -1,23 +1,9 @@
-<app-select [options]="allAreaNames"
-            (selection)="fetchVariablesFromArea($event)"
-            placeholder="Select an area"></app-select>
-<app-select [options]="allAreaVariableNames"
-            (selection)="fetchVariableData($event)"
-            placeholder="Select a variable from this area"></app-select>
-<app-select [options]="variableSectionNames"
-            (selection)="fetchPeriodsFromSection($event)"
-            placeholder="Select a section from this variable"></app-select>
-<app-select [options]="allSectionPeriodNames"
-            (selection)="onSelectSection($event)"
-            placeholder="Select a period from this section"></app-select>
-
-<label for="year-selector">{{selectedYear}}</label>
-<input type="range" id="year-selector"
-       [disabled]="yearRange.length==0"
-       [min]="yearRange[0]"
-       [max]="yearRange[1]"
-       [(ngModel)]="selectedYear">
-
-<button (click)="fetchVariableValues()">Fetch all variable data</button>
+<app-api-query-form [areaNames]="areaNames" (areaSelected)="onSelectArea($event)"
+                    [variableNames]="variableNames" (variableSelected)="onSelectVariable($event)"
+                    [sectionNames]="sectionNames" (sectionSelected)="onSelectSection($event)"
+                    [periodNames]="periodNames" (periodSelected)="onSelectPeriod($event)"
+                    [yearRange]="yearRange" (yearSelected)="onSelectYear($event)"
+                    (querySubmitted)="onSubmit()">
+</app-api-query-form>
 
 <app-object-table [objects]="variableValues"></app-object-table>

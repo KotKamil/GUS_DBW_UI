@@ -2,7 +2,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Injectable} from "@angular/core";
 import {Language} from "../models/language.model";
-import {Area110Model} from "../models/area-1-1-0.model";
+import {AreaModel} from "../models/area.model";
 import {VariableAreaModel} from "../models/variable-area.model";
 
 @Injectable({providedIn: "root"})
@@ -14,7 +14,7 @@ export class DbwAreaService {
   //Get a list of all thematic areas from DBW
   GetAreas(language: Language) {
     return this.httpClient
-      .get<Area110Model[]>(this.url + 'area-area', {params: {lang: language}})
+      .get<AreaModel[]>(this.url + 'area-area', {params: {lang: language}})
   }
 
   //Get a list of variables from thematic area

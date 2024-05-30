@@ -9,6 +9,7 @@ import {ObjectTableComponent} from "./components/atoms/object-table/object-table
 import { TestPageComponent } from './components/pages/test-page/test-page.component';
 import {AppRoutingModule} from "./app-routing.module";
 import { SearchDataPageComponent } from './components/pages/search-data-page/search-data-page.component';
+import { ApiQueryFormComponent } from './components/organisms/api-query-form/api-query-form.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SearchDataPageComponent } from './components/pages/search-data-page/sea
     ObjectTableComponent,
     TestPageComponent,
     SearchDataPageComponent,
+    ApiQueryFormComponent,
   ],
   imports: [
     BrowserModule,

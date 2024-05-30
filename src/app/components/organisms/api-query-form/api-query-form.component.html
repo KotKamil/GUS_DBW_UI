@@ -1,0 +1,24 @@
+<div>
+  <app-select [options]="areaNames"
+              (selection)="selectArea($event)"
+              placeholder="Select an area"></app-select>
+  <app-select [options]="variableNames"
+              (selection)="selectVariable($event)"
+              placeholder="Select a variable from this area"></app-select>
+  <app-select [options]="sectionNames"
+              (selection)="selectSection($event)"
+              placeholder="Select a section from this variable"></app-select>
+  <app-select [options]="periodNames"
+              (selection)="selectPeriod($event)"
+              placeholder="Select a period from this section"></app-select>
+
+  <label for="year-selector">{{selectedYear}}</label>
+  <input type="range" id="year-selector"
+         [disabled]="yearRange.length==0"
+         [min]="yearRange[0]"
+         [max]="yearRange[1]"
+         (ngModelChange)="selectYear($event)"
+         [(ngModel)]="selectedYear">
+
+  <button (click)="submitQuery()">Fetch all variable data</button>
+</div>

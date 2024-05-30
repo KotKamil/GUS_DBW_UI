@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {VariableSectionPeriodModel} from "../models/variable-section-period.model";
+import {SectionModel} from "../models/section.model";
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class LocalstorageService {
     /** This method is used to find all sections and periods for given variable index,
      * saved in the local storage by the **LocalstorageService.setDBWVariableSectionPeriod** method
      * @param variableId: The variable id*/
-    findSectionsAndPeriods(variableId: number): VariableSectionPeriodModel[] {
+    findSectionsAndPeriods(variableId: number): SectionModel[] {
       const keys = Object.keys(localStorage);
       const foundKeys = keys.filter(key => key.startsWith(variableId+'-'));
       return foundKeys.map(key => JSON.parse(localStorage.getItem(key) || '')); // return the values of the found keys

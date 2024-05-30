@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Area110Model} from "../../../models/area-1-1-0.model";
+import {AreaModel} from "../../../models/area.model";
 import {VariableAreaModel} from "../../../models/variable-area.model";
-import {VariableSectionPeriodModel} from "../../../models/variable-section-period.model";
+import {SectionModel} from "../../../models/section.model";
 import {MetadataModel} from "../../../models/metadata.model";
-import {VariableDataSectionModel} from "../../../models/variable-data-section.model";
+import {VariableValuesModel} from "../../../models/variable-values.model";
 import {DbwAreaService} from "../../../services/dbw-area.service";
 import {DbwDictionariesService} from "../../../services/dbw-dictionaries.service";
 import {DbwVariableService} from "../../../services/dbw-variable.service";
@@ -16,13 +16,13 @@ import {Language} from "../../../models/language.model";
 })
 export class TestPageComponent implements OnInit {
   title = 'ui';
-  areas: Area110Model[] = []
+  areas: AreaModel[] = []
   areaVariables: VariableAreaModel[] = []
   selectedVariable?: number;
   selectedArea?: number;
-  variableSectionPeriods!: VariableSectionPeriodModel[];
+  variableSectionPeriods!: SectionModel[];
   variableMeta?: MetadataModel;
-  variableValues: VariableDataSectionModel[] = []
+  variableValues: VariableValuesModel[] = []
   variableSection?: number;
   year?: number;
   period?: number;

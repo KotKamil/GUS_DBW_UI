@@ -2,10 +2,10 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Language} from "../models/language.model";
-import {VariableSectionPeriodModel} from "../models/variable-section-period.model";
+import {SectionModel} from "../models/section.model";
 import {map, Observable} from "rxjs";
 import {VariableSectionPostionModel} from "../models/variable-section-postion.model";
-import {VariableDataSectionModel} from "../models/variable-data-section.model";
+import {VariableValuesModel} from "../models/variable-values.model";
 import {MetadataModel} from "../models/metadata.model";
 
 @Injectable({providedIn: "root"})
@@ -37,7 +37,7 @@ export class DbwVariableService {
     params = params.append('numer-strony', pageNumber)
 
     return this.httpClient
-      .get<{data: VariableSectionPeriodModel[]}>(this.url + 'variable-section-periods', {params})
+      .get<{data: SectionModel[]}>(this.url + 'variable-section-periods', {params})
       .pipe(map(response => response.data))
   }
 
@@ -70,7 +70,7 @@ export class DbwVariableService {
     params = params.append('numer-strony', pageNumber)
 
     return this.httpClient
-      .get<{data: VariableDataSectionModel[]}>(this.url + 'variable-data-section', {params})
+      .get<{data: VariableValuesModel[]}>(this.url + 'variable-data-section', {params})
       .pipe(map(result => result.data))
   }
 

@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {DbwAreaService} from "../../../services/dbw-area.service";
-import {Area110Model} from "../../../models/area-1-1-0.model";
+import {AreaModel} from "../../../models/area.model";
 import {Language} from "../../../models/language.model";
 import {VariableAreaModel} from "../../../models/variable-area.model";
 import {DbwVariableService} from "../../../services/dbw-variable.service";
 import {LocalstorageService} from "../../../services/localstorage.service";
-import {VariableSectionPeriodModel} from "../../../models/variable-section-period.model";
+import {SectionModel} from "../../../models/section.model";
 import {PeriodModel} from "../../../models/period.model";
 import {DbwDictionariesService} from "../../../services/dbw-dictionaries.service";
-import {VariableDataSectionModel} from "../../../models/variable-data-section.model";
+import {VariableValuesModel} from "../../../models/variable-values.model";
 
 @Component({
   selector: 'app-search-data-page',
@@ -16,25 +16,26 @@ import {VariableDataSectionModel} from "../../../models/variable-data-section.mo
   styleUrls: ['./search-data-page.component.css']
 })
 export class SearchDataPageComponent implements OnInit {
-  allAreas: Area110Model[] = []
-  allAreaNames: string[] = []
+  areas: AreaModel[] = []
+  areaNames: string[] = []
 
-  allAreaVariables: VariableAreaModel[] = []
-  allAreaVariableNames: string[] = []
+  variables: VariableAreaModel[] = []
+  variableNames: string[] = []
 
-  variableSectionPeriods: VariableSectionPeriodModel[] = []
-  variableSectionNames: string[] = []
+  sections: SectionModel[] = []
+  sectionNames: string[] = []
   selectedSectionId: number = 0;
-  allSectionPeriods: PeriodModel[] = []
-  allSectionPeriodNames: string[] = []
-  allVariablePeriodIds: number[] = []
+  periods: PeriodModel[] = []
+  periodNames: string[] = []
+  periodIds: number[] = []
   selectedPeriodId: number = 0;
 
   activeVariableId: number = 0;
   yearRange: number[] = []
   selectedYear: number = 0;
 
-  variableValues: VariableDataSectionModel[] = []
+  variableValues: VariableValuesModel[] = []
+
   constructor(public dbwAreaService: DbwAreaService,
               public dbwVariableService: DbwVariableService,
               public dbwDictionariesService: DbwDictionariesService,
@@ -44,49 +45,49 @@ export class SearchDataPageComponent implements OnInit {
     this.dbwAreaService
       .GetAreas(Language.pl)
       .subscribe(response => {
-        this.allAreas = response;
-        this.allAreaNames = response.filter(area => area["czy-zmienne"]).map(area => area.nazwa)
+        this.areas = response;
+        this.areaNames = response.filter(area => area["czy-zmienne"]).map(area => area.nazwa)
       })
 
     this.dbwVariableService.GetVariableSectionPeriods(Language.pl, 10, 1)
   }
 
-  fetchVariablesFromArea(areaName: string) {
-    const selectedArea = this.allAreas.find(area => area.nazwa === areaName);
+  onSelectArea(areaName: string) {
+    const selectedArea = this.areas.find(area => area.nazwa === areaName);
     if (selectedArea !== undefined) {
       this.dbwAreaService
         .GetAreaVariables(Language.pl, selectedArea.id)
         .subscribe(response => {
-          this.allAreaVariables = response
-          this.allAreaVariableNames = response.map(variable => variable["nazwa-zmienna"])
+          this.variables = response
+          this.variableNames = response.map(variable => variable["nazwa-zmienna"])
         })
     }
   }
 
-  fetchVariableData(variableName: string) {
-    const selectedVariable = this.allAreaVariables.find(variable => variable["nazwa-zmienna"] === variableName);
+  onSelectVariable(variableName: string) {
+    const selectedVariable = this.variables.find(variable => variable["nazwa-zmienna"] === variableName);
 
     if (selectedVariable !== undefined) {
       this.activeVariableId = selectedVariable["id-zmienna"]
-      this.variableSectionPeriods = this.localstorageService.findSectionsAndPeriods(selectedVariable["id-zmienna"])
-      this.variableSectionNames = this.variableSectionPeriods
+      this.sections = this.localstorageService.findSectionsAndPeriods(selectedVariable["id-zmienna"])
+      this.sectionNames = this.sections
         .map(section => section["nazwa-przekroj"])
 
-      this.variableSectionNames = this.variableSectionNames.filter((section, index) => this.variableSectionNames.indexOf(section) === index)
+      this.sectionNames = this.sectionNames.filter((section, index) => this.sectionNames.indexOf(section) === index)
 
-      this.allVariablePeriodIds = this.variableSectionPeriods
-        .filter(section => !this.allVariablePeriodIds.includes(section["id-okres"]))
+      this.periodIds = this.sections
+        .filter(section => !this.periodIds.includes(section["id-okres"]))
         .map(section => section["id-okres"])
     }
   }
 
-  fetchPeriodsFromSection(sectionName: string) {
-    const selectedSection = this.variableSectionPeriods.find(section => section["nazwa-przekroj"] === sectionName);
+  onSelectSection(sectionName: string) {
+    const selectedSection = this.sections.find(section => section["nazwa-przekroj"] === sectionName);
     if (selectedSection !== undefined) {
       this.selectedSectionId = selectedSection["id-przekroj"]
       let minPeriodId = 100000000
       let maxPeriodId = -100000000
-      this.variableSectionPeriods
+      this.sections
         .filter(section => section["nazwa-przekroj"] === sectionName)
         .forEach(section => {
           if (section["id-okres"] < minPeriodId) {
@@ -100,8 +101,8 @@ export class SearchDataPageComponent implements OnInit {
       this.dbwDictionariesService
         .GetPeriodFromRange(Language.pl, minPeriodId, maxPeriodId)
         .subscribe(response => {
-          this.allSectionPeriods = response.filter(period => this.allVariablePeriodIds.includes(period["id-okres"]))
-          this.allSectionPeriodNames = this.allSectionPeriods.map(period => period["opis"])
+          this.periods = response.filter(period => this.periodIds.includes(period["id-okres"]))
+          this.periodNames = this.periods.map(period => period["opis"])
         })
 
       this.dbwVariableService.GetVariableMeta(Language.pl, this.activeVariableId)
@@ -114,14 +115,18 @@ export class SearchDataPageComponent implements OnInit {
     }
   }
 
-  onSelectSection(PeriodName: string) {
-    const selectedPeriod = this.allSectionPeriods.find(period => period["opis"] === PeriodName)
+  onSelectPeriod(PeriodName: string) {
+    const selectedPeriod = this.periods.find(period => period["opis"] === PeriodName)
     if (selectedPeriod !== undefined) {
       this.selectedPeriodId = selectedPeriod["id-okres"]
     }
   }
 
-  fetchVariableValues() {
+  onSelectYear(year: number) {
+    this.selectedYear = year
+  }
+
+  onSubmit() {
     this.dbwVariableService
       .GetVariableDataSection(Language.pl, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
       .subscribe(response => this.variableValues = response)
