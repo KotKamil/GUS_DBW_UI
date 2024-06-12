@@ -2,9 +2,9 @@
   <thead
     (click)="hideData()"
     *ngIf="objects.length > 0">
-    <th *ngFor="let key of keys">{{key}}</th>
+    <th *ngFor="let key of keys" class="border">{{key}}</th>
   </thead>
-  <tbody [class.hide]="isDataHidden">
+  <tbody [class.hidden]="isDataHidden">
     <tr *ngFor="let object of objects" >
       <td *ngFor="let key of keys">{{object[key]}}</td>
     </tr>

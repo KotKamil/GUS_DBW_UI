@@ -9,6 +9,9 @@ import {SectionModel} from "../../../models/section.model";
 import {PeriodModel} from "../../../models/period.model";
 import {DbwDictionariesService} from "../../../services/dbw-dictionaries.service";
 import {VariableValuesModel} from "../../../models/variable-values.model";
+import {MetadataModel} from "../../../models/metadata.model";
+import {PresentationMethodMeasure110Model} from "../../../models/presentation-method-measure-1-1-0.model";
+import {VariableSectionPostionModel} from "../../../models/variable-section-postion.model";
 
 @Component({
   selector: 'app-search-data-page',
@@ -33,8 +36,12 @@ export class SearchDataPageComponent implements OnInit {
   activeVariableId: number = 0;
   yearRange: number[] = []
   selectedYear: number = 0;
-
   variableValues: VariableValuesModel[] = []
+
+  variableMeta?: MetadataModel;
+  wayOfPresentationIds: number[] = []
+  waysOfPresentation: PresentationMethodMeasure110Model[] = []
+  variableSectionPositions: VariableSectionPostionModel[]  = []
 
   constructor(public dbwAreaService: DbwAreaService,
               public dbwVariableService: DbwVariableService,
@@ -48,8 +55,6 @@ export class SearchDataPageComponent implements OnInit {
         this.areas = response;
         this.areaNames = response.filter(area => area["czy-zmienne"]).map(area => area.nazwa)
       })
-
-    this.dbwVariableService.GetVariableSectionPeriods(Language.pl, 10, 1)
   }
 
   onSelectArea(areaName: string) {
@@ -85,18 +90,11 @@ export class SearchDataPageComponent implements OnInit {
     const selectedSection = this.sections.find(section => section["nazwa-przekroj"] === sectionName);
     if (selectedSection !== undefined) {
       this.selectedSectionId = selectedSection["id-przekroj"]
-      let minPeriodId = 100000000
-      let maxPeriodId = -100000000
-      this.sections
-        .filter(section => section["nazwa-przekroj"] === sectionName)
-        .forEach(section => {
-          if (section["id-okres"] < minPeriodId) {
-            minPeriodId = section["id-okres"]
-          }
-          if (section["id-okres"] > maxPeriodId) {
-            maxPeriodId = section["id-okres"]
-          }
-      });
+      this.sections = this.sections.filter(section => section["nazwa-przekroj"] === sectionName)
+
+      const minPeriodId = Math.min(...this.periodIds)
+      const maxPeriodId = Math.max(...this.periodIds)
+
 
       this.dbwDictionariesService
         .GetPeriodFromRange(Language.pl, minPeriodId, maxPeriodId)
@@ -111,6 +109,11 @@ export class SearchDataPageComponent implements OnInit {
           if (sectionMeta !== undefined) {
             this.yearRange = sectionMeta["szereg-czasowy"].split("-").map(year => parseInt(year))
           }
+        })
+
+      this.dbwVariableService.GetVariableSectionPosition(Language.pl, this.selectedSectionId)
+        .subscribe(response => {
+          this.variableSectionPositions = response
         })
     }
   }
@@ -129,6 +132,23 @@ export class SearchDataPageComponent implements OnInit {
   onSubmit() {
     this.dbwVariableService
       .GetVariableDataSection(Language.pl, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
-      .subscribe(response => this.variableValues = response)
+      .subscribe(response => {
+        this.variableValues = response
+        const valueSet = new Set<number>();
+
+        response.forEach(item => {
+          if (item['id-sposob-prezentacji-miara'] !== undefined) {
+            valueSet.add(item['id-sposob-prezentacji-miara']);
+          }
+        });
+
+        this.wayOfPresentationIds = Array.from(valueSet);
+        const minWOPId = Math.min(...this.wayOfPresentationIds);
+        const maxWOPId = Math.max(...this.wayOfPresentationIds);
+        this.dbwDictionariesService.GetWayOfPresentationFromRange(Language.pl, minWOPId, maxWOPId)
+          .subscribe(response => {
+            this.waysOfPresentation = response.filter(wop => this.wayOfPresentationIds.includes(wop["id-sposob-prezentacji-miara"]))
+          })
+      })
   }
 }

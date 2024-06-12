@@ -6,4 +6,7 @@
                     (querySubmitted)="onSubmit()">
 </app-api-query-form>
 
-<app-object-table [objects]="variableValues"></app-object-table>
+<app-data-presentation [variableValues]="variableValues"
+                       [variableMeta]="variableMeta"
+                       [sectionPositions]="variableSectionPositions"
+                       [waysOfPresentation]="waysOfPresentation"></app-data-presentation>

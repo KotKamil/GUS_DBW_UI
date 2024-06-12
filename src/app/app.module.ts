@@ -10,6 +10,7 @@ import { TestPageComponent } from './components/pages/test-page/test-page.compon
 import {AppRoutingModule} from "./app-routing.module";
 import { SearchDataPageComponent } from './components/pages/search-data-page/search-data-page.component';
 import { ApiQueryFormComponent } from './components/organisms/api-query-form/api-query-form.component';
+import { DataPresentationComponent } from './components/organisms/data-presentation/data-presentation.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ApiQueryFormComponent } from './components/organisms/api-query-form/api
     TestPageComponent,
     SearchDataPageComponent,
     ApiQueryFormComponent,
+    DataPresentationComponent,
   ],
   imports: [
     BrowserModule,
