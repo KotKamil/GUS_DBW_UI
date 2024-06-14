@@ -1,12 +1,10 @@
-<table>
-  <thead
-    (click)="hideData()"
-    *ngIf="objects.length > 0">
-    <th *ngFor="let key of keys" class="border">{{key}}</th>
+<table class="w-full overflow-scroll p-1 bg-emerald-100 rounded-lg shadow-xl text-sm web:text-base">
+  <thead *ngIf="objects.length > 0" class="bg-emerald-800 text-white">
+    <th *ngFor="let key of keys" class="border-x-2 border-black web:p-2">{{key}}</th>
   </thead>
-  <tbody [class.hidden]="isDataHidden">
-    <tr *ngFor="let object of objects" >
-      <td *ngFor="let key of keys">{{object[key]}}</td>
+  <tbody>
+    <tr *ngFor="let object of objects; index as i" [class.bg-emerald-300]="i%2==0" [class.bg-emerald-200]="i%2!=0">
+      <td *ngFor="let key of keys" class="border-x-2 border-black" >{{object[key]}}</td>
     </tr>
   </tbody>
 </table>

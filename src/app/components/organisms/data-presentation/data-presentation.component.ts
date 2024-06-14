@@ -28,7 +28,7 @@ export class DataPresentationComponent implements OnChanges {
   createObjectTableData() {
     if (this.variableValues.length > 0 && this.sectionPositions.length > 0) {
       this.objectTableData = this.variableValues.map((variableValue: VariableValuesModel) => {
-        let rowObject: object = { rownumber: variableValue['rownumber']}
+        let rowObject: object = {};
 
         for (const key of Object.keys(variableValue)) {
           if (key.startsWith('id-wymiar-') && variableValue.hasOwnProperty(key)) {
@@ -52,9 +52,12 @@ export class DataPresentationComponent implements OnChanges {
           }
         };
 
+        const wayOfPresentationId = variableValue['id-sposob-prezentacji-miara'];
+
         rowObject = {
           ...rowObject,
           ['wartość']: variableValue['wartosc'],
+          ['miara']: this.waysOfPresentation.find((wayOfPresentation: PresentationMethodMeasure110Model) => wayOfPresentation["id-sposob-prezentacji-miara"] === wayOfPresentationId)?.["nazwa"] || 'Brak',
         }
 
         return rowObject;

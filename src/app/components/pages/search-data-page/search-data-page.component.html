@@ -1,12 +1,19 @@
-<app-api-query-form [areaNames]="areaNames" (areaSelected)="onSelectArea($event)"
-                    [variableNames]="variableNames" (variableSelected)="onSelectVariable($event)"
-                    [sectionNames]="sectionNames" (sectionSelected)="onSelectSection($event)"
-                    [periodNames]="periodNames" (periodSelected)="onSelectPeriod($event)"
-                    [yearRange]="yearRange" (yearSelected)="onSelectYear($event)"
-                    (querySubmitted)="onSubmit()">
-</app-api-query-form>
+<div class="w-full min-h-screen p-1 bg-sky-100 space-y-4">
+  <app-api-query-form [areaNames]="areaNames" (areaSelected)="onSelectArea($event)"
+                      [variableNames]="variableNames" (variableSelected)="onSelectVariable($event)"
+                      [sectionNames]="sectionNames" (sectionSelected)="onSelectSection($event)"
+                      [periodNames]="periodNames" (periodSelected)="onSelectPeriod($event)"
+                      [yearRange]="yearRange" (yearSelected)="onSelectYear($event)"
+                      (querySubmitted)="onSubmit()">
+  </app-api-query-form>
 
-<app-data-presentation [variableValues]="variableValues"
-                       [variableMeta]="variableMeta"
-                       [sectionPositions]="variableSectionPositions"
-                       [waysOfPresentation]="waysOfPresentation"></app-data-presentation>
+  <div class="m-auto" *ngIf="isFetching">
+      <span>Loading data...</span>
+  </div>
+  <div *ngIf="!isFetching && variableValues.length > 0">
+    <app-data-presentation [variableValues]="variableValues"
+                           [variableMeta]="variableMeta"
+                           [sectionPositions]="variableSectionPositions"
+                           [waysOfPresentation]="waysOfPresentation"></app-data-presentation>
+  </div>
+</div>

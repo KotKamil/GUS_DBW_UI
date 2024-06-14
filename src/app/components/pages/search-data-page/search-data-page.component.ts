@@ -12,6 +12,7 @@ import {VariableValuesModel} from "../../../models/variable-values.model";
 import {MetadataModel} from "../../../models/metadata.model";
 import {PresentationMethodMeasure110Model} from "../../../models/presentation-method-measure-1-1-0.model";
 import {VariableSectionPostionModel} from "../../../models/variable-section-postion.model";
+import {catchError} from "rxjs";
 
 @Component({
   selector: 'app-search-data-page',
@@ -42,6 +43,8 @@ export class SearchDataPageComponent implements OnInit {
   wayOfPresentationIds: number[] = []
   waysOfPresentation: PresentationMethodMeasure110Model[] = []
   variableSectionPositions: VariableSectionPostionModel[]  = []
+
+  isFetching = false;
 
   constructor(public dbwAreaService: DbwAreaService,
               public dbwVariableService: DbwVariableService,
@@ -130,25 +133,31 @@ export class SearchDataPageComponent implements OnInit {
   }
 
   onSubmit() {
-    this.dbwVariableService
-      .GetVariableDataSection(Language.pl, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
-      .subscribe(response => {
-        this.variableValues = response
-        const valueSet = new Set<number>();
+    this.isFetching = true;
+    try {
+      this.dbwVariableService
+        .GetVariableDataSection(Language.pl, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
+        .subscribe(response => {
 
-        response.forEach(item => {
-          if (item['id-sposob-prezentacji-miara'] !== undefined) {
-            valueSet.add(item['id-sposob-prezentacji-miara']);
-          }
-        });
+          this.variableValues = response
+          const valueSet = new Set<number>();
 
-        this.wayOfPresentationIds = Array.from(valueSet);
-        const minWOPId = Math.min(...this.wayOfPresentationIds);
-        const maxWOPId = Math.max(...this.wayOfPresentationIds);
-        this.dbwDictionariesService.GetWayOfPresentationFromRange(Language.pl, minWOPId, maxWOPId)
-          .subscribe(response => {
-            this.waysOfPresentation = response.filter(wop => this.wayOfPresentationIds.includes(wop["id-sposob-prezentacji-miara"]))
-          })
-      })
+          response.forEach(item => {
+            if (item['id-sposob-prezentacji-miara'] !== undefined) {
+              valueSet.add(item['id-sposob-prezentacji-miara']);
+            }
+          });
+
+          this.wayOfPresentationIds = Array.from(valueSet);
+          const minWOPId = Math.min(...this.wayOfPresentationIds);
+          const maxWOPId = Math.max(...this.wayOfPresentationIds);
+          this.dbwDictionariesService.GetWayOfPresentationFromRange(Language.pl, minWOPId, maxWOPId)
+            .subscribe(response => {
+              this.waysOfPresentation = response.filter(wop => this.wayOfPresentationIds.includes(wop["id-sposob-prezentacji-miara"]))
+            })
+        })
+    } finally {
+      this.isFetching = false;
+    }
   }
 }

@@ -19,7 +19,7 @@ export class ApiQueryFormComponent implements OnInit {
   @Input() periodNames: string[] = [];
   @Input() yearRange: number[] = [];
 
-  selectedYear: number = new Date().getFullYear();
+  selectedYear?: number;
 
   constructor() { }
 

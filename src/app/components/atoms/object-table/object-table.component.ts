@@ -8,7 +8,6 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 export class ObjectTableComponent implements OnChanges {
   @Input() objects!: Array<{ [key: string]: any }>
   keys: Array<string> = []
-  isDataHidden = true
 
   constructor() {
   }
@@ -16,9 +15,5 @@ export class ObjectTableComponent implements OnChanges {
   ngOnChanges(changes:SimpleChanges): void {
     if (changes['objects'] && this.objects.length > 0)
       this.keys = Object.keys(this.objects[0])
-  }
-
-  hideData() {
-    this.isDataHidden = !this.isDataHidden;
   }
 }
