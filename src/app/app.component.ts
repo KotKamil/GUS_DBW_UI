@@ -17,11 +17,17 @@ export class AppComponent {
     /**This is a bad way of doing this, but DBW API doesn't have filter option on this endpoint.
      * App fetches a data from API and loads it into localstorage to make searching for specific values possible */
     const pageSize = 3000;
-    this.dbwVariableService.GetVariableSectionPeriodsPageCount(Language.pl, pageSize).subscribe(pageCount => {
+    this.fetchSections(pageSize, Language.pl)
+    // Do this again for English language
+    this.fetchSections(pageSize, Language.en)
+  }
+
+  fetchSections(pageSize: number, language: Language) {
+    this.dbwVariableService.GetVariableSectionPeriodsPageCount(language, pageSize).subscribe(pageCount => {
       for (let i = 0; i < pageCount; i++) {
-        this.dbwVariableService.GetVariableSectionPeriods(Language.pl, pageSize, i).subscribe(variables => {
+        this.dbwVariableService.GetVariableSectionPeriods(language, pageSize, i).subscribe(variables => {
           variables.forEach(variable => {
-            this.localstorageService.setDBWVariableSectionPeriod(variable['id-zmienna'], variable['id-przekroj'], variable['id-okres'], variable);
+            this.localstorageService.setDBWVariableSectionPeriod(variable['id-zmienna'], variable['id-przekroj'], variable['id-okres'], variable, language);
           });
         });
       }

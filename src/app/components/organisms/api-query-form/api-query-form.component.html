@@ -1,4 +1,12 @@
 <div class="flex flex-col space-y-1 p-1 bg-gradient-to-tl from-cyan-300 to-green-300 rounded-lg shadow-xl web:mx-[30vw] web:p-4 web:space-y-2">
+  <div class="flex justify-between p-1">
+    <span class="font-bold">
+      Select data language:
+    </span>
+    <select [value]="selectedLanguage" (change)="selectLanguage($event)" class="p-1">
+      <option *ngFor="let lang of languages" [value]="lang">{{lang}}</option>
+    </select>
+  </div>
   <app-select [options]="areaNames"
               (selection)="selectArea($event)"
               placeholder="Select an area"></app-select>
