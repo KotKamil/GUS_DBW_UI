@@ -3,8 +3,7 @@ import {VariableValuesModel} from "../../../models/variable-values.model";
 import {MetadataModel} from "../../../models/metadata.model";
 import {VariableSectionPostionModel} from "../../../models/variable-section-postion.model";
 import {PresentationMethodMeasure110Model} from "../../../models/presentation-method-measure-1-1-0.model";
-import {stripBom} from "@angular-devkit/build-angular/src/utils/strip-bom";
-import {of} from "rxjs";
+import {Language} from "../../../models/language.model";
 
 @Component({
   selector: 'app-data-presentation',
@@ -12,6 +11,7 @@ import {of} from "rxjs";
   styleUrls: ['./data-presentation.component.css']
 })
 export class DataPresentationComponent implements OnChanges {
+  @Input() language!: Language;
   @Input() variableValues: VariableValuesModel[] = [];
   @Input() variableMeta: MetadataModel | undefined;
   @Input() sectionPositions: VariableSectionPostionModel[] = [];
@@ -56,8 +56,8 @@ export class DataPresentationComponent implements OnChanges {
 
         rowObject = {
           ...rowObject,
-          ['wartość']: variableValue['wartosc'],
-          ['miara']: this.waysOfPresentation.find((wayOfPresentation: PresentationMethodMeasure110Model) => wayOfPresentation["id-sposob-prezentacji-miara"] === wayOfPresentationId)?.["nazwa"] || 'Brak',
+          [this.language === Language.pl ? 'wartość' : 'value']: variableValue['wartosc'],
+          [this.language === Language.pl ? 'miara' : 'measure']: this.waysOfPresentation.find((wayOfPresentation: PresentationMethodMeasure110Model) => wayOfPresentation["id-sposob-prezentacji-miara"] === wayOfPresentationId)?.["nazwa"] || 'Brak',
         }
 
         return rowObject;

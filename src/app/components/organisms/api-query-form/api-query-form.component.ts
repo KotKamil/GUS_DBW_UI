@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Language} from "../../../models/language.model";
 
 @Component({
   selector: 'app-api-query-form',
@@ -12,7 +13,9 @@ export class ApiQueryFormComponent implements OnInit {
   @Output() periodSelected = new EventEmitter<string>();
   @Output() yearSelected = new EventEmitter<number>();
   @Output() querySubmitted = new EventEmitter<void>();
+  @Output() languageSelected:EventEmitter<any> = new EventEmitter<any>();
 
+  @Input() selectedLanguage!: Language;
   @Input() areaNames: string[] = [];
   @Input() variableNames: string[] = [];
   @Input() sectionNames: string[] = [];
@@ -20,10 +23,15 @@ export class ApiQueryFormComponent implements OnInit {
   @Input() yearRange: number[] = [];
 
   selectedYear?: number;
+  languages = ["pl", "en"];
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  selectLanguage($event: any) {
+    this.languageSelected.emit($event.target.value);
   }
 
   selectArea($event: string) {

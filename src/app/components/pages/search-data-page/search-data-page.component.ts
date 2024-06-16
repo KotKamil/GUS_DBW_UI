@@ -12,7 +12,6 @@ import {VariableValuesModel} from "../../../models/variable-values.model";
 import {MetadataModel} from "../../../models/metadata.model";
 import {PresentationMethodMeasure110Model} from "../../../models/presentation-method-measure-1-1-0.model";
 import {VariableSectionPostionModel} from "../../../models/variable-section-postion.model";
-import {catchError} from "rxjs";
 
 @Component({
   selector: 'app-search-data-page',
@@ -20,6 +19,8 @@ import {catchError} from "rxjs";
   styleUrls: ['./search-data-page.component.css']
 })
 export class SearchDataPageComponent implements OnInit {
+  selectedLanguage: Language = Language.pl;
+
   areas: AreaModel[] = []
   areaNames: string[] = []
 
@@ -52,8 +53,12 @@ export class SearchDataPageComponent implements OnInit {
               public localstorageService: LocalstorageService) { }
 
   ngOnInit(): void {
+    this.fetchAreas()
+  }
+
+  fetchAreas() {
     this.dbwAreaService
-      .GetAreas(Language.pl)
+      .GetAreas(this.selectedLanguage)
       .subscribe(response => {
         this.areas = response;
         this.areaNames = response.filter(area => area["czy-zmienne"]).map(area => area.nazwa)
@@ -64,7 +69,7 @@ export class SearchDataPageComponent implements OnInit {
     const selectedArea = this.areas.find(area => area.nazwa === areaName);
     if (selectedArea !== undefined) {
       this.dbwAreaService
-        .GetAreaVariables(Language.pl, selectedArea.id)
+        .GetAreaVariables(this.selectedLanguage, selectedArea.id)
         .subscribe(response => {
           this.variables = response
           this.variableNames = response.map(variable => variable["nazwa-zmienna"])
@@ -77,7 +82,7 @@ export class SearchDataPageComponent implements OnInit {
 
     if (selectedVariable !== undefined) {
       this.activeVariableId = selectedVariable["id-zmienna"]
-      this.sections = this.localstorageService.findSectionsAndPeriods(selectedVariable["id-zmienna"])
+      this.sections = this.localstorageService.findSectionsAndPeriods(selectedVariable["id-zmienna"], this.selectedLanguage)
       this.sectionNames = this.sections
         .map(section => section["nazwa-przekroj"])
 
@@ -100,13 +105,13 @@ export class SearchDataPageComponent implements OnInit {
 
 
       this.dbwDictionariesService
-        .GetPeriodFromRange(Language.pl, minPeriodId, maxPeriodId)
+        .GetPeriodFromRange(this.selectedLanguage, minPeriodId, maxPeriodId)
         .subscribe(response => {
           this.periods = response.filter(period => this.periodIds.includes(period["id-okres"]))
           this.periodNames = this.periods.map(period => period["opis"])
         })
 
-      this.dbwVariableService.GetVariableMeta(Language.pl, this.activeVariableId)
+      this.dbwVariableService.GetVariableMeta(this.selectedLanguage, this.activeVariableId)
         .subscribe(response => {
           const sectionMeta = response["przekroje"].find(section => section["id-przekroj"] === selectedSection["id-przekroj"])
           if (sectionMeta !== undefined) {
@@ -114,7 +119,7 @@ export class SearchDataPageComponent implements OnInit {
           }
         })
 
-      this.dbwVariableService.GetVariableSectionPosition(Language.pl, this.selectedSectionId)
+      this.dbwVariableService.GetVariableSectionPosition(this.selectedLanguage, this.selectedSectionId)
         .subscribe(response => {
           this.variableSectionPositions = response
         })
@@ -136,7 +141,7 @@ export class SearchDataPageComponent implements OnInit {
     this.isFetching = true;
     try {
       this.dbwVariableService
-        .GetVariableDataSection(Language.pl, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
+        .GetVariableDataSection(this.selectedLanguage, this.activeVariableId, this.selectedSectionId, this.selectedYear, this.selectedPeriodId, 5000, 0)
         .subscribe(response => {
 
           this.variableValues = response
@@ -151,7 +156,7 @@ export class SearchDataPageComponent implements OnInit {
           this.wayOfPresentationIds = Array.from(valueSet);
           const minWOPId = Math.min(...this.wayOfPresentationIds);
           const maxWOPId = Math.max(...this.wayOfPresentationIds);
-          this.dbwDictionariesService.GetWayOfPresentationFromRange(Language.pl, minWOPId, maxWOPId)
+          this.dbwDictionariesService.GetWayOfPresentationFromRange(this.selectedLanguage, minWOPId, maxWOPId)
             .subscribe(response => {
               this.waysOfPresentation = response.filter(wop => this.wayOfPresentationIds.includes(wop["id-sposob-prezentacji-miara"]))
             })
@@ -159,5 +164,10 @@ export class SearchDataPageComponent implements OnInit {
     } finally {
       this.isFetching = false;
     }
+  }
+
+  onSelectLanguage($event: any) {
+    this.selectedLanguage = $event;
+    this.fetchAreas()
   }
 }

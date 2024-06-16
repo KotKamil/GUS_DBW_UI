@@ -4,6 +4,7 @@
                       [sectionNames]="sectionNames" (sectionSelected)="onSelectSection($event)"
                       [periodNames]="periodNames" (periodSelected)="onSelectPeriod($event)"
                       [yearRange]="yearRange" (yearSelected)="onSelectYear($event)"
+                      [selectedLanguage]="selectedLanguage" (languageSelected)="onSelectLanguage($event)"
                       (querySubmitted)="onSubmit()">
   </app-api-query-form>
 
@@ -14,6 +15,7 @@
     <app-data-presentation [variableValues]="variableValues"
                            [variableMeta]="variableMeta"
                            [sectionPositions]="variableSectionPositions"
-                           [waysOfPresentation]="waysOfPresentation"></app-data-presentation>
+                           [waysOfPresentation]="waysOfPresentation"
+                           [language]="selectedLanguage"></app-data-presentation>
   </div>
 </div>
